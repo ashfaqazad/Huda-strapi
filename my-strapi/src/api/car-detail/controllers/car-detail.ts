@@ -1,0 +1,7 @@
+/**
+ * car-detail controller
+ */
+
+import { factories } from '@strapi/strapi'
+
+export default factories.createCoreController('api::car-detail.car-detail');

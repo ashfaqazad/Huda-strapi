@@ -1,0 +1,14 @@
+{
+  "kind": "collectionType",
+  "collectionName": "car_details",
+  "info": {
+    "singularName": "car-detail",
+    "pluralName": "car-details",
+    "displayName": "CarDetail"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {}
+}
