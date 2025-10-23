@@ -22,6 +22,8 @@ export default function CarDetail() {
     }
   }, [lng, i18n]);
 
+  
+
   // Strapi se single car fetch karne ka useEffect (ID pe depend karta hai)
   useEffect(() => {
     const fetchCar = async () => {

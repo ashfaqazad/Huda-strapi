@@ -33,50 +33,42 @@ export default function Home() {
     return num.toLocaleString() + ' km';
   };
 
+
+
   // --- Strapi se data fetch karna ---
   /* eslint-disable no-undef */
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        
+
         // const strapiUrl = process.env.REACT_APP_STRAPI_URL || 'http://localhost:1337';
         const strapiUrl = import.meta.env.VITE_STRAPI_URL || 'http://localhost:1337';
         const response = await axios.get(`${strapiUrl}/api/cars?populate=image`);
         console.log('Strapi URL:', strapiUrl);
-        // console.log('ENV CHECK:', {
-        //   process: typeof process,
-        //   env: process?.env,
-        //   reactApp: process?.env?.REACT_APP_STRAPI_URL,
-        //   importMeta: import.meta?.env,
-        //   viteUrl: import.meta?.env?.VITE_STRAPI_URL
-        // });
 
 
-        
+        // fetchCars function ke andar
         const mappedCars = response.data.data.map((car) => ({
           id: car.id,
           Title: {
-            en: car.title_en,
-            ja: car.title_ja,
+            en: car.title_en || '',  // Direct access
+            ja: car.title_ja || '',
           },
-          price: parseInt(car.price, 10),
-          year: car.year,
+          price: parseInt(car.price, 10) || 0,  // String to number
+          year: car.year || 'N/A',
           mileage: {
-            en: formatMileage(car.mileage_en),
+            en: formatMileage(car.mileage_en),  // Direct
             ja: formatMileage(car.mileage_ja),
           },
-          img:
-            car.image && car.image.length > 0
-              ? `${strapiUrl}${car.image[0].url}`
-              : null,
+          // FIXED IMAGE (no [0], direct url)
+          img: car.image?.url
+            ? `${strapiUrl}${car.image.url}`
+            : null,
           short: {
             en: 'A reliable used car ready for new adventures',
             ja: '新しい冒険に備えた信頼できる中古車',
           },
         }));
-
-
-
 
         // Sirf pehli 3 cars featured ke liye
         setCars(mappedCars.slice(0, 3));
@@ -93,6 +85,9 @@ export default function Home() {
   }, []);
   /* eslint-enable no-undef */
 
+
+
+  
   // --- Helper to generate language-prefixed links ---
   const getLink = (path) => `/${currentLanguage}${path === '/' ? '' : path}`;
 
@@ -193,7 +188,7 @@ export default function Home() {
                       <img
                         src={car.img}
                         alt={car.Title[currentLanguage] || car.Title.en}
-                        className="w-full h-44 object-cover"
+                        className="w-full h-80 object-cover"
                       />
                     ) : (
                       <div className="w-full h-44 bg-gray-200 flex items-center justify-center">
