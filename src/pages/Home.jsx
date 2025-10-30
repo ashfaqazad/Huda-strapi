@@ -48,27 +48,124 @@ export default function Home() {
 
 
         // fetchCars function ke andar
-        const mappedCars = response.data.data.map((car) => ({
-          id: car.id,
-          Title: {
-            en: car.title_en || '',  // Direct access
-            ja: car.title_ja || '',
-          },
-          price: parseInt(car.price, 10) || 0,  // String to number
-          year: car.year || 'N/A',
-          mileage: {
-            en: formatMileage(car.mileage_en),  // Direct
-            ja: formatMileage(car.mileage_ja),
-          },
-          // FIXED IMAGE (no [0], direct url)
-          img: car.image?.url
-            ? `${strapiUrl}${car.image.url}`
-            : null,
-          short: {
-            en: 'A reliable used car ready for new adventures',
-            ja: '新しい冒険に備えた信頼できる中古車',
-          },
-        }));
+        // const mappedCars = response.data.data.map((car) => ({
+        //   id: car.id,
+        //   Title: {
+        //     en: car.title_en || '',  // Direct access
+        //     ja: car.title_ja || '',
+        //   },
+        //   price: parseInt(car.price, 10) || 0,  // String to number
+        //   year: car.year || 'N/A',
+        //   mileage: {
+        //     en: formatMileage(car.mileage_en),  // Direct
+        //     ja: formatMileage(car.mileage_ja),
+        //   },
+        //   // ✅ FIXED IMAGE: Handles Multiple Media (array) + Single (fallback)
+        //   img: car.image?.data
+        //     ? `${strapiUrl}${Array.isArray(car.image.data)
+        //       ? car.image.data[0]?.attributes?.url || null  // First image from multiple array
+        //       : car.image.data?.attributes?.url || null  // Fallback for single media (purana data)
+        //     }`
+        //     : null,
+        //   short: {
+        //     en: 'A reliable used car ready for new adventures',
+        //     ja: '新しい冒険に備えた信頼できる中古車',
+        //   },
+        // }));
+
+
+
+        // const mappedCars = response.data.data.map((rawCar) => {
+        //   // v5 mein already flattened, so direct use karo (no attributes extract needed)
+        //   const car = rawCar;  // Yeh simple rakha — id aur fields direct hain
+
+        //   return {
+        //     id: car.id,
+        //     Title: {
+        //       en: car.title_en || '',  // Direct — v5 style
+        //       ja: car.title_ja || '',
+        //     },
+        //     price: parseInt(car.price, 10) || 0,
+        //     year: car.year || 'N/A',
+        //     mileage: {
+        //       en: formatMileage(car.mileage_en),
+        //       ja: formatMileage(car.mileage_ja),
+        //     },
+        //     // ✅ v5 FIXED IMAGE: Multiple (data[0].url) + Single (direct url) fallback
+
+
+        //     img: car.image?.data
+        //       ? `${strapiUrl}${Array.isArray(car.image.data)
+        //         ? car.image.data[0]?.url || null  // First image from multiple array (no attributes!)
+        //         : car.image.data?.url || null  // Fallback for single media (direct url)
+        //       }`
+        //       : null,
+        //     short: {
+        //       en: 'A reliable used car ready for new adventures',
+        //       ja: '新しい冒険に備えた信頼できる中古車',
+        //     },
+        //   };
+        // });
+
+
+        const mappedCars = response.data.data.map((rawCar) => {
+          // v5 mein already flattened, so direct use karo
+          const car = rawCar;  // Simple — id aur fields direct hain
+
+          // ✅ DEBUG LOGS: Yeh yahan daalo — har car ke liye print hoga
+          console.log('Full Raw Car (v5):', rawCar);  // Pura structure dekho
+          console.log('Car Image Data:', car.image?.data);  // Array hona chahiye [ { id:1, url:'/uploads/...' } ]
+          console.log('First Image URL:', car.image?.data?.[0]?.url);  // Yeh valid URL dikhega
+          console.log('Final Img:', /* img value here — neeche calculate karo pehle */
+            car.image?.data
+              ? `${strapiUrl}${Array.isArray(car.image.data)
+                ? car.image.data[0]?.url || null
+                : car.image.data?.url || null
+              }`
+              : null
+          );  // Complete URL like 'http://localhost:1337/uploads/car.jpg'
+
+          return {
+            id: car.id,
+            Title: {
+              en: car.title_en || '',
+              ja: car.title_ja || '',
+            },
+            price: parseInt(car.price, 10) || 0,
+            year: car.year || 'N/A',
+            mileage: {
+              en: formatMileage(car.mileage_en),
+              ja: formatMileage(car.mileage_ja),
+            },
+            // Image logic (same as before)
+            // img: car.image?.data
+            //   ? `${strapiUrl}${Array.isArray(car.image.data)
+            //     ? car.image.data[0]?.url || null
+            //     : car.image.data?.url || null
+            //   }`
+            //   : null,
+
+            img: car.image && car.image.length > 0
+              ? `${strapiUrl}${car.image[0].url}`
+              : '/placeholder.jpg',  // Public folder mein default image daal do
+            short: {
+              en: 'A reliable used car ready for new adventures',
+              ja: '新しい冒険に備えた信頼できる中古車',
+            },
+          };
+        });
+
+        // Sirf pehli 3 cars featured ke liye
+        setCars(mappedCars.slice(0, 3));
+        console.log('Fetched featured cars from Strapi (v5):', mappedCars.slice(0, 3));
+
+        // Sirf pehli 3 cars featured ke liye
+        setCars(mappedCars.slice(0, 3));
+        console.log('Fetched featured cars from Strapi (v5):', mappedCars.slice(0, 3));
+
+        // Sirf pehli 3 cars featured ke liye
+        setCars(mappedCars.slice(0, 3));
+        console.log('Fetched featured cars from Strapi:', mappedCars.slice(0, 3));
 
         // Sirf pehli 3 cars featured ke liye
         setCars(mappedCars.slice(0, 3));
@@ -87,7 +184,7 @@ export default function Home() {
 
 
 
-  
+
   // --- Helper to generate language-prefixed links ---
   const getLink = (path) => `/${currentLanguage}${path === '/' ? '' : path}`;
 

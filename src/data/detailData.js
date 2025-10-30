@@ -133,24 +133,6 @@ Feel free to contact for inspection or more details.
     ],
   },
 
-  // --- ID: 3 Komatsu PC20MR-1 Mini Excavator ---
-  // {
-  //   id: 3,
-  //   title: { en: "Komatsu PC20MR-1 Mini Excavator", ja: "コマツ PC20MR-1 ミニショベル" },
-  //   price: "¥700,000 (70万)",
-  //   year: { en: "-", ja: "-" },
-  //   mileage: { en: "-", ja: "-" },
-  //   location: { en: "Nara, Japan", ja: "奈良、日本" },
-  //   transmission: { en: "Hydraulic System", ja: "油圧システム" },
-  //   shaken: { en: "N/A", ja: "なし" },
-  //   kittsu: { en: "Available", ja: "記録簿あり" },
-  //   video: "/Videos/loder.mp4",
-
-  // },
-
-
-
-
 
   {
   id: 3,
